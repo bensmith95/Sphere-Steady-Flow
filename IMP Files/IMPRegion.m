@@ -54,7 +54,6 @@ function IMPRegion(Re)
     % Determine U inlet
     Tm = -10/Re + pi/2; [~,i] = min(abs(theta-Tm));
     UI = sqrt(Re)*spline(eta,-UB(i,:),Eta); % U in
-    eta = Eta;
     % Determine W via finite differences of SF
     W = zeros(Nbeta,Neta); 
     W(2:Nbeta-1,:) = (Psi(4:Nbeta+1,2:Neta+1)-Psi(2:Nbeta-1,2:Neta+1))*0.5*hi;
@@ -66,15 +65,15 @@ function IMPRegion(Re)
     U(:,Neta) = 0; U(:,1) = 0; U(Nbeta,:) = UI; U(1,:) = 0; 
     
     % Solve Poisson Equation for Pressure
-    etam = (eta(1:end-1)+eta(2:end))*0.5; betam = (beta(1:end-1)+beta(2:end))*0.5;
-    P = Pressure(W,U,Re,h); 
+    PB = VelBL{4}; PI = spline(eta,PB(i,:),Eta); % P in
+    P = Pressure(U,V(2:end-1,2:end-1),W,PI,h); 
 
     % save data to file
     VelIMP{1} = U; VelIMP{2} = V(2:end-1,2:end-1); VelIMP{3} = W; 
     VelIMP{4} = Psi(2:end-1,2:end-1); VelIMP{5} = Omega(2:end-1,2:end-1); VelIMP{6} = P;
     filename = ['../Flows/IMP/IMP_Re=',num2str(Re),'.mat'];
     if exist('../Flows/IMP','dir')==0; mkdir ../Flows/IMP; end
-    save(filename, 'VelIMP', 'eta', 'beta', 'etam', 'betam')
+    eta = Eta; save(filename, 'VelIMP', 'eta', 'beta')
     fprintf(repmat('\b',1,str2)); str2 = fprintf('Flow saved in %s\n', filename); pause(1)
 
     fprintf(repmat('\b',1,str2)); fprintf(repmat('\b',1,str1));
