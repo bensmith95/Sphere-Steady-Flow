@@ -135,7 +135,7 @@ set(gcf, 'Position',  [200, 200, 1200, 400])
 
 % Plot Pressure 
 figure(8); TT = ['$\bar{P}(\eta,\beta)$ at $\sqrt{R_e} =$ ',num2str(Re)];
-fn = pcolor(etam,betam,PIMP); fn.FaceColor = 'interp'; set(fn,'EdgeColor','none');
+fn = pcolor(eta,beta,PIMP); fn.FaceColor = 'interp'; set(fn,'EdgeColor','none');
 colorbar; colormap('jet'); 
 xlabel('\eta','fontsize',12); xlim([0 30])
 ylabel('-\beta','fontsize',12,'rotation',0); ylim([0 10]) 
